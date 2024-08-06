@@ -1,9 +1,11 @@
-import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, Body, Delete } from '@nestjs/common';
+import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, Body, Delete, HttpException, HttpStatus, UseFilters } from '@nestjs/common';
 
 import { CreateCatDto } from './create_cat.dto';
 import { ListAllEntities } from './ListAllEntities.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
+import { ForbiddenException } from 'src/common/exceptions/ForbiddenException';
+
 
 @Controller('cats')
 export class CatController {
@@ -35,7 +37,7 @@ export class CatController {
 
   @Delete(':id')
   remove(@Param('id') id: string): string {
-    return `This action removes a #${id} cat`
+    throw new ForbiddenException();
   }
 
   @Get('*')
