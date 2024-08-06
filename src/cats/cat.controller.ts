@@ -1,10 +1,13 @@
-import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, Body, Delete, HttpException, HttpStatus, UseFilters } from '@nestjs/common';
+import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, Body, Delete, HttpException, HttpStatus, UseFilters, ParseIntPipe, UsePipes } from '@nestjs/common';
+
+import { ForbiddenException } from 'src/common/exceptions/ForbiddenException';
+import { ValidationPipe } from 'src/common/pipes/validation.pipe';
 
 import { CreateCatDto } from './create_cat.dto';
 import { ListAllEntities } from './ListAllEntities.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
-import { ForbiddenException } from 'src/common/exceptions/ForbiddenException';
+
 
 
 @Controller('cats')
@@ -13,7 +16,7 @@ export class CatController {
 
   @Post()
   @Header('Cache-Control', 'none')
-  create(@Body() createCatDto: CreateCatDto) {
+  create(@Body(new ValidationPipe()) createCatDto: CreateCatDto) {
     this.catsService.create(createCatDto);
   }
 
@@ -30,13 +33,13 @@ export class CatController {
     }
   }
 
-  @Get(':id')
-  findOne(@Param('id') id:string): string {
-    return `This action returns a #${id} cat`
+  @Get(':index')
+  findOne(@Param('index', ParseIntPipe) index: number): Cat {
+    return this.catsService.findOne(index);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string): string {
+  @Delete(':index')
+  remove(@Param('index') index: string): string {
     throw new ForbiddenException();
   }
 

@@ -14,7 +14,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       .json({
         path: request.url,
         timestamp: new Date().toISOString(),
-        ...exception.getResponse(),
+        ...(exception.getResponse() as object),
       });
   }
 }
