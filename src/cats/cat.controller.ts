@@ -1,4 +1,4 @@
-import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, Body, Delete, HttpException, HttpStatus, UseFilters, ParseIntPipe, UsePipes } from '@nestjs/common';
+import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, Body, Delete, HttpException, HttpStatus, UseFilters, ParseIntPipe, UsePipes, UseGuards } from '@nestjs/common';
 
 import { ForbiddenException } from 'src/common/exceptions/ForbiddenException';
 import { ValidationPipe } from 'src/common/pipes/validation.pipe';
@@ -7,8 +7,7 @@ import { CreateCatDto } from './create_cat.dto';
 import { ListAllEntities } from './ListAllEntities.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
-
-
+import { Roles } from 'src/common/guards/roles.decorator';
 
 @Controller('cats')
 export class CatController {
@@ -39,8 +38,9 @@ export class CatController {
   }
 
   @Delete(':index')
+  @Roles(['admin'])
   remove(@Param('index') index: string): string {
-    throw new ForbiddenException();
+    return "Resource deleted"
   }
 
   @Get('*')
