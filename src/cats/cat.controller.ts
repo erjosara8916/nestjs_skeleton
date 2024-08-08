@@ -1,4 +1,4 @@
-import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, Body, Delete, HttpException, HttpStatus, UseFilters, ParseIntPipe, UsePipes, UseGuards } from '@nestjs/common';
+import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, Body, Delete, HttpException, HttpStatus, UseFilters, ParseIntPipe, UsePipes, UseGuards, UseInterceptors } from '@nestjs/common';
 
 import { ForbiddenException } from 'src/common/exceptions/ForbiddenException';
 import { ValidationPipe } from 'src/common/pipes/validation.pipe';
@@ -8,6 +8,7 @@ import { ListAllEntities } from './ListAllEntities.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
 import { Roles } from 'src/common/guards/roles.decorator';
+import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
 
 @Controller('cats')
 export class CatController {
@@ -20,6 +21,7 @@ export class CatController {
   }
 
   @Get()
+  @UseInterceptors(TransformInterceptor)
   async findAll(@Query() query: ListAllEntities): Promise<Cat[]> {
     return this.catsService.findAll();
   }
