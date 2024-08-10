@@ -1,6 +1,5 @@
 import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, Body, Delete, HttpException, HttpStatus, UseFilters, ParseIntPipe, UsePipes, UseGuards, UseInterceptors } from '@nestjs/common';
 
-import { ForbiddenException } from 'src/common/exceptions/ForbiddenException';
 import { ValidationPipe } from 'src/common/pipes/validation.pipe';
 
 import { CreateCatDto } from './create_cat.dto';
@@ -12,7 +11,9 @@ import { TransformInterceptor } from 'src/common/interceptors/transform.intercep
 
 @Controller('cats')
 export class CatController {
-  constructor(private catsService: CatsService) {}
+  constructor(
+    private catsService: CatsService
+  ) {}
 
   @Post()
   @Header('Cache-Control', 'none')
