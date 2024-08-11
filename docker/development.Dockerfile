@@ -9,13 +9,15 @@ WORKDIR /app
 
 RUN npm i -g @nestjs/cli
 
-COPY . /app
+COPY package.json pnpm-lock.yaml /app/
 
 FROM base AS dev-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM base
 COPY --from=dev-deps /app/node_modules /app/node_modules
+
+COPY . /app/
 
 EXPOSE $PORT
 EXPOSE 9229
