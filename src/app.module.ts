@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { AppController } from './app.controller';
@@ -9,6 +9,8 @@ import { CatsModule } from './cats/cats.module';
 import { HttpExceptionFilter } from './common/filters/httpException.filter';
 import { RolesGuard } from './common/guards/roles.guard';
 import { validate } from "./config/env.validation";
+import { DataSource } from 'typeorm';
+import { Cat } from './cats/cat.entity';
 
 
 @Module({
@@ -16,18 +18,21 @@ import { validate } from "./config/env.validation";
     CatsModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      cache: true,
       validate
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DATABASE_HOST,
-      port: parseInt(process.env.DATABASE_PORT),
-      username: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
-      entities: [],
-      synchronize: process.env.DATABASE_SYNC === 'true',
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get('DATABASE_HOST'),
+        port: +configService.get('DATABASE_PORT'),
+        username: configService.get('DATABASE_USER'),
+        password: configService.get('DATABASE_PASSWORD'),
+        database: configService.get('DATABASE_NAME'),
+        entities: [Cat],
+        synchronize: false,
+      })
     }),
   ],
   controllers: [AppController],

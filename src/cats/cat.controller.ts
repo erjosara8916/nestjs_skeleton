@@ -13,7 +13,8 @@ import { TransformInterceptor } from 'src/common/interceptors/transform.intercep
 export class CatController {
   constructor(
     private catsService: CatsService
-  ) {}
+  ) {
+  }
 
   @Post()
   @Header('Cache-Control', 'none')
@@ -24,7 +25,8 @@ export class CatController {
   @Get()
   @UseInterceptors(TransformInterceptor)
   async findAll(@Query() query: ListAllEntities): Promise<Cat[]> {
-    return this.catsService.findAll();
+    return this.catsService.findAll(); 
+
   }
 
   @Get('docs')
@@ -43,7 +45,7 @@ export class CatController {
   @Delete(':index')
   @Roles(['admin'])
   remove(@Param('index') index: string): string {
-    return "Resource deleted"
+    return "Resource deleted!!"
   }
 
   @Get('*')
