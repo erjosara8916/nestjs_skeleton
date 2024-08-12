@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CatController } from "./cat.controller";
 import { CatsService } from './cats.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Cat } from './cat.entity';
+import { Cat } from 'src/core/database/entities/cat.entity';
 
 
 @Module({

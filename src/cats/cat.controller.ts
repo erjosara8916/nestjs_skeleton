@@ -2,8 +2,8 @@ import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, B
 
 import { ValidationPipe } from 'src/common/pipes/validation.pipe';
 
-import { CreateCatDto } from './create_cat.dto';
-import { ListAllEntities } from './ListAllEntities.dto';
+import { CreateCatDto } from './dto/create-cat.dto';
+import { ListAllEntities } from './dto/ListAllEntities.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
 import { Roles } from 'src/common/guards/roles.decorator';
@@ -37,9 +37,9 @@ export class CatController {
     }
   }
 
-  @Get(':index')
-  findOne(@Param('index', ParseIntPipe) index: number): Cat {
-    return this.catsService.findOne(index);
+  @Get(':id')
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Cat | null> {
+    return this.catsService.findOne(id);
   }
 
   @Delete(':index')
