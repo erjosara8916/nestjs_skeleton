@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CatsModule } from './cats/cats.module';
+import { CatsModule } from './modules/cats/cats.module';
 import { HttpExceptionFilter } from './common/filters/httpException.filter';
 import { RolesGuard } from './common/guards/roles.guard';
 import { validate } from "./config/env.validation";
