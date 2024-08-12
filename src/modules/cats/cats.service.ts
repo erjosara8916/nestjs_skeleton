@@ -13,12 +13,8 @@ export class CatsService {
     private catsRepository: Repository<Cat>
   ) {}
 
-  async create(cat: CreateCatDto) {
-    const newCat = new Cat();
-    newCat.name = cat.name;
-    newCat.age = cat.age;
-    newCat.breed = cat.breed;
-    await this.catsRepository.save(newCat);
+  async create(cat: CreateCatDto): Promise<Cat> {
+    return await this.catsRepository.save(cat);
   }
 
   async findAll(PaginationDto): Promise<PaginationDao<Cat>> {

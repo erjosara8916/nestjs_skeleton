@@ -4,12 +4,12 @@ import { ValidationPipe } from 'src/common/pipes/validation.pipe';
 import { PaginationDto } from 'src/common/dto/http/pagination.dto';
 import { Roles } from 'src/common/guards/roles.decorator';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
+import { PaginationResponseInterface } from 'src/common/interfaces/pagination-response.interface';
 
 import { CreateCatDto } from './dto/create-cat.dto';
 
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
-import { PaginationResponseInterface } from 'src/common/interfaces/pagination-response.interface';
 
 @Controller('cats')
 export class CatController {
@@ -20,8 +20,8 @@ export class CatController {
 
   @Post()
   @Header('Cache-Control', 'none')
-  create(@Body(new ValidationPipe()) createCatDto: CreateCatDto) {
-    this.catsService.create(createCatDto);
+  async create(@Body(new ValidationPipe()) createCatDto: CreateCatDto): Promise<Cat> {
+    return this.catsService.create(createCatDto);
   }
 
   @Get()
