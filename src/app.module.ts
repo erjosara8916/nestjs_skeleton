@@ -9,8 +9,8 @@ import { CatsModule } from './cats/cats.module';
 import { HttpExceptionFilter } from './common/filters/httpException.filter';
 import { RolesGuard } from './common/guards/roles.guard';
 import { validate } from "./config/env.validation";
-import { DataSource } from 'typeorm';
 import { Cat } from './cats/cat.entity';
+import { ENVIRONMENT } from './config/constants/env.constants';
 
 
 @Module({
@@ -25,11 +25,11 @@ import { Cat } from './cats/cat.entity';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql',
-        host: configService.get('DATABASE_HOST'),
-        port: +configService.get('DATABASE_PORT'),
-        username: configService.get('DATABASE_USER'),
-        password: configService.get('DATABASE_PASSWORD'),
-        database: configService.get('DATABASE_NAME'),
+        host: configService.get(ENVIRONMENT.DATABASE.HOST),
+        port: +configService.get(ENVIRONMENT.DATABASE.PORT),
+        username: configService.get(ENVIRONMENT.DATABASE.USERNAME),
+        password: configService.get(ENVIRONMENT.DATABASE.PASSWORD),
+        database: configService.get(ENVIRONMENT.DATABASE.NAME),
         entities: [Cat],
         synchronize: false,
       })
