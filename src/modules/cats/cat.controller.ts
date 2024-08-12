@@ -1,13 +1,15 @@
-import { Controller, Get, Header, HttpCode, Post, Query, Redirect, Req, Param, Body, Delete, HttpException, HttpStatus, UseFilters, ParseIntPipe, UsePipes, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Header, Post, Query, Redirect, Param, Body, Delete, HttpException, HttpStatus, UseFilters, ParseIntPipe, UsePipes, UseGuards, UseInterceptors } from '@nestjs/common';
 
 import { ValidationPipe } from 'src/common/pipes/validation.pipe';
-
-import { CreateCatDto } from './dto/create-cat.dto';
-import { ListAllEntities } from './dto/ListAllEntities.dto';
-import { CatsService } from './cats.service';
-import { Cat } from './interfaces/cat.interface';
+import { PaginationDto } from 'src/common/dto/http/pagination.dto';
 import { Roles } from 'src/common/guards/roles.decorator';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
+
+import { CreateCatDto } from './dto/create-cat.dto';
+
+import { CatsService } from './cats.service';
+import { Cat } from './interfaces/cat.interface';
+import { PaginationResponseInterface } from 'src/common/interfaces/pagination-response.interface';
 
 @Controller('cats')
 export class CatController {
@@ -24,8 +26,10 @@ export class CatController {
 
   @Get()
   @UseInterceptors(TransformInterceptor)
-  async findAll(@Query() query: ListAllEntities): Promise<Cat[]> {
-    return this.catsService.findAll(); 
+  async findAll(
+    @Query() query: PaginationDto
+  ): Promise<PaginationResponseInterface<Cat>> {
+    return this.catsService.findAll(query); 
 
   }
 
@@ -51,6 +55,5 @@ export class CatController {
   @Get('*')
   @Redirect('/cats', 301)
   getRedirect() { }
-
 
 }
