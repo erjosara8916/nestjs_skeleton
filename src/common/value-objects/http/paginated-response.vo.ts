@@ -1,19 +1,19 @@
-import { PaginationResponseInterface } from "src/common/interfaces/pagination-response.interface";
-export class PaginationDao<T> implements PaginationResponseInterface<T> {
-  data: T[];
-  meta: {
-    total_items: number;
-    current_page: number;
-    page_size: number;
-    total_pages: number;
-  };
+import { 
+  PaginatedResponseInterface, 
+  PaginatedResponseMetadataInterface,
+  PaginatedResponseLinksInterface
+} from "src/common/interfaces/http/paginated-response.interface";
+import { ApiProperty } from "@nestjs/swagger";
 
-  links?: {
-    first: string;
-    previous: string | null;
-    next: string | null;
-    last: string;
-  };
+export class PaginatedResponse<T> implements PaginatedResponseInterface<T> {
+  @ApiProperty()
+  data: T[];
+
+  @ApiProperty()
+  meta: PaginatedResponseMetadataInterface;
+
+  @ApiProperty()
+  links?: PaginatedResponseLinksInterface
 
   constructor(
     items: T[],

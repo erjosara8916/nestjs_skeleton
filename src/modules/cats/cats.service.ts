@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import { CreateCatDto } from "./dto/create-cat.dto";
 import { Cat } from "src/core/database/entities/cat.entity";
-import { PaginationDao } from 'src/common/dao/http/pagination.dao';
+import { PaginatedResponse } from 'src/common/value-objects/http/paginated-response.vo';
 @Injectable()
 export class CatsService {
 
@@ -17,7 +17,7 @@ export class CatsService {
     return await this.catsRepository.save(cat);
   }
 
-  async findAll(PaginationDto): Promise<PaginationDao<Cat>> {
+  async findAll(PaginationDto): Promise<PaginatedResponse<Cat>> {
     const page = +PaginationDto.page
     const limit = +PaginationDto.limit;
     const offset = (page - 1) * limit;
@@ -28,7 +28,7 @@ export class CatsService {
       /* order: sort ? { [sort.split(':')[0]]: sort.split(':')[1].toUpperCase() } : undefined, */
     });
 
-    const response = new PaginationDao<Cat>(items, page, limit, total_items);
+    const response = new PaginatedResponse<Cat>(items, page, limit, total_items);
     return response;
   }
 

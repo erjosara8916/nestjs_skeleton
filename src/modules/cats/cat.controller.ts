@@ -1,16 +1,23 @@
-import { Controller, Get, Header, Post, Query, Redirect, Param, Body, Delete, HttpException, HttpStatus, UseFilters, ParseIntPipe, UsePipes, UseGuards, UseInterceptors } from '@nestjs/common';
+import { 
+  Controller, Get, Header, Post, Query, 
+  Redirect, Param, Body, Delete,
+  ParseIntPipe, UsePipes, UseGuards, UseInterceptors 
+} from '@nestjs/common';
+import { ApiTags, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 
 import { ValidationPipe } from 'src/common/pipes/validation.pipe';
 import { PaginationDto } from 'src/common/dto/http/pagination.dto';
 import { Roles } from 'src/common/guards/roles.decorator';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
-import { PaginationResponseInterface } from 'src/common/interfaces/pagination-response.interface';
+import { PaginatedResponseInterface } from 'src/common/interfaces/http/paginated-response.interface';
 
 import { CreateCatDto } from './dto/create-cat.dto';
 
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
 
+
+@ApiTags('cats')
 @Controller('cats')
 export class CatController {
   constructor(
@@ -25,10 +32,11 @@ export class CatController {
   }
 
   @Get()
+  @ApiOkResponse({ description: 'List of cats', isArray: true })
   @UseInterceptors(TransformInterceptor)
   async findAll(
     @Query() query: PaginationDto
-  ): Promise<PaginationResponseInterface<Cat>> {
+  ): Promise<PaginatedResponseInterface<Cat>> {
     return this.catsService.findAll(query); 
 
   }
@@ -46,9 +54,11 @@ export class CatController {
     return this.catsService.findOne(id);
   }
 
-  @Delete(':index')
+  @Delete(':id')
   @Roles(['admin'])
-  remove(@Param('index') index: string): string {
+  @ApiOkResponse({ description: 'Cat deleted', isArray: true })
+  @ApiParam({ name: 'id', description: 'Cat id to delete' })
+  remove(@Param('id') index: string): string {
     return "Resource deleted!!"
   }
 
