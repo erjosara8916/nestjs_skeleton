@@ -1,7 +1,8 @@
 import { 
   Controller, Get, Header, Post, Query, 
   Redirect, Param, Body, Delete,
-  ParseIntPipe, UseInterceptors 
+  ParseIntPipe, UseInterceptors, 
+  DefaultValuePipe
 } from '@nestjs/common';
 import { ApiTags, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 
@@ -35,8 +36,12 @@ export class CatController {
   @ApiOkResponse({ description: 'List of cats', isArray: true })
   @UseInterceptors(TransformInterceptor)
   async findAll(
-    @Query() query: PaginationDto
+    @Query('page', new DefaultValuePipe(1)) page: number,
+    @Query('limit', new DefaultValuePipe(20)) limit: number
   ): Promise<PaginatedResponse<Cat>> {
+    let query = new PaginationDto();
+    query.page = page;
+    query.limit = limit;
     return this.catsService.findAll(query); 
 
   }
