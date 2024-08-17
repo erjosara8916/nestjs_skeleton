@@ -1,7 +1,7 @@
 import { 
   Controller, Get, Header, Post, Query, 
   Redirect, Param, Body, Delete,
-  ParseIntPipe, UsePipes, UseGuards, UseInterceptors 
+  ParseIntPipe, UseInterceptors 
 } from '@nestjs/common';
 import { ApiTags, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 
@@ -9,7 +9,7 @@ import { ValidationPipe } from 'src/common/pipes/validation.pipe';
 import { PaginationDto } from 'src/common/dto/http/pagination.dto';
 import { Roles } from 'src/common/guards/roles.decorator';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
-import { PaginatedResponseInterface } from 'src/common/interfaces/http/paginated-response.interface';
+import { PaginatedResponse } from './dto/paginated-response.dto';
 
 import { CreateCatDto } from './dto/create-cat.dto';
 
@@ -36,7 +36,7 @@ export class CatController {
   @UseInterceptors(TransformInterceptor)
   async findAll(
     @Query() query: PaginationDto
-  ): Promise<PaginatedResponseInterface<Cat>> {
+  ): Promise<PaginatedResponse<Cat>> {
     return this.catsService.findAll(query); 
 
   }

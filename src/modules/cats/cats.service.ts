@@ -4,7 +4,8 @@ import { Repository } from 'typeorm';
 
 import { CreateCatDto } from "./dto/create-cat.dto";
 import { Cat } from "src/core/database/entities/cat.entity";
-import { PaginatedResponse } from 'src/common/value-objects/http/paginated-response.vo';
+import { PaginatedResponse } from './dto/paginated-response.dto';
+
 @Injectable()
 export class CatsService {
 
@@ -28,7 +29,7 @@ export class CatsService {
       /* order: sort ? { [sort.split(':')[0]]: sort.split(':')[1].toUpperCase() } : undefined, */
     });
 
-    const response = new PaginatedResponse<Cat>(items, page, limit, total_items);
+    const response = {items, total_items};
     return response;
   }
 
