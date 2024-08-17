@@ -20,7 +20,7 @@ import { Cat } from './interfaces/cat.interface';
 
 @ApiTags('cats')
 @Controller('cats')
-export class CatController {
+export class CatsController {
   constructor(
     private catsService: CatsService
   ) {

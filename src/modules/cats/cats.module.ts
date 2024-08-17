@@ -3,13 +3,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Cat } from 'src/core/database/entities/cat.entity';
 
-import { CatController } from "./cat.controller";
+import { CatsController } from "./cats.controller";
 import { CatsService } from './cats.service';
 
 
 @Module({
   imports: [TypeOrmModule.forFeature([Cat])],
-  controllers: [CatController],
+  controllers: [CatsController],
   providers: [CatsService],
   exports: [CatsService]
 })
