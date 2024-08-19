@@ -5,35 +5,32 @@ import { ConfigModule } from '@nestjs/config';
 import { CatsModule } from './modules/cats/cats.module';
 import { HttpExceptionFilter } from './common/filters/httpException.filter';
 import { RolesGuard } from './common/guards/roles.guard';
-import { validate } from "./config/env.validation";
-import { DatabaseModule } from './core/database/database.module';
-
+import { validate } from './config/env.validation';
+import { TypeormModule } from './infrastructure/persistence/typeorm/typeorm.module';
 
 @Module({
-  imports: [
-    CatsModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      validate
-    }),
-    DatabaseModule,
-  ],
-  controllers: [],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    }
-  ],
+	imports: [
+		CatsModule,
+		ConfigModule.forRoot({
+			isGlobal: true,
+			validate,
+		}),
+		TypeormModule,
+	],
+	controllers: [],
+	providers: [
+		{
+			provide: APP_FILTER,
+			useClass: HttpExceptionFilter,
+		},
+		{
+			provide: APP_GUARD,
+			useClass: RolesGuard,
+		},
+	],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply()
-      .forRoutes('cats');
-  }
+	configure(consumer: MiddlewareConsumer) {
+		consumer.apply().forRoutes('cats');
+	}
 }
