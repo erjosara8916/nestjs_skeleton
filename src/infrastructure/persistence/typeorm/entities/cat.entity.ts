@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-import { CatEntity } from 'src/domain/entities/cat.entity';
+import { Cat as CatEntity } from 'src/domain/cat/entities/cat.entity';
 
 @Entity()
 export class Cat extends CatEntity {
