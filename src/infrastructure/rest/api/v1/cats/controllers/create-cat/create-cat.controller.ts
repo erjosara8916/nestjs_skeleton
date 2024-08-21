@@ -1,14 +1,21 @@
 import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
-import { CreateCatDTO } from './create-cat.dto';
+import { RestCreateCatDTO } from './create-cat.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AsyncController } from 'src/infrastructure/rest/base/abstract/async-controller.abstract';
+import { CreateCatUseCase } from 'src/application/use-cases/cats/create-cat/create-cat.use-case';
+import { Cat } from 'src/domain/cat/entities/cat.entity';
 
-@ApiTags('v1/cats')
-@Controller('v1/cats')
-export class CreateCatController {
+@ApiTags('api/v1/cats')
+@Controller('api/v1/cats')
+export class CreateCatController extends AsyncController<any> {
+	constructor(private readonly createCatUseCase: CreateCatUseCase) {
+		super();
+	}
+
 	@Post()
-	async create(
-		@Body(new ValidationPipe()) createCatDTO: CreateCatDTO,
-	): Promise<string> {
-		return 'This action adds a new cat';
+	async handler(
+		@Body(new ValidationPipe()) createCatDTO: RestCreateCatDTO,
+	): Promise<Cat> {
+		return this.createCatUseCase.execute(createCatDTO);
 	}
 }
