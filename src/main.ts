@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 import { logger } from './common/middlewares/logger.middleware';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
-import { setupSwagger } from './core/swagger/swagger.setup';
+import { setupSwagger } from './infrastructure/swagger/swagger.setup';
 
 async function bootstrap() {
 	const PORT = 8080;
