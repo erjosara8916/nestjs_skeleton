@@ -4,15 +4,17 @@ import { ConfigModule } from '@nestjs/config';
 
 import { HttpExceptionFilter } from './common/filters/httpException.filter';
 import { RolesGuard } from './common/guards/roles.guard';
-import { validate } from './config/env.validation';
+import { validate } from './infrastructure/config/env.validation';
 import { TypeormModule } from './infrastructure/persistence/typeorm/typeorm.module';
 import { ApiModule } from './infrastructure/rest/api/api.module';
+
+import { AppConfig } from './infrastructure/config/app.config';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
-			validate,
+			validate: validate(AppConfig),
 		}),
 		TypeormModule,
 		ApiModule,

@@ -2,14 +2,15 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { validate } from '../config/env.validation';
+import { validate } from 'src/infrastructure/config/env.validation';
 import { ENVIRONMENT } from '../config/env.constants';
+import { DbConfig } from '../config/db.config';
 import { Cat } from './entities/cat.entity';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({
-			validate,
+			validate: validate(DbConfig),
 		}),
 		TypeOrmModule.forRootAsync({
 			imports: [ConfigModule],
